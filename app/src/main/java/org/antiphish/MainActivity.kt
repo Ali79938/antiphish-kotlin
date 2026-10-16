@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                     SessionManager.startedAt = System.currentTimeMillis()
                     requestPermissionsAndShowDashboard()
                 }
-                else -> Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show()
+                else -> Toast.makeText(this@MainActivity, "Invalid credentials", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -261,7 +261,7 @@ class MainActivity : AppCompatActivity() {
             val s = sender.text.toString().trim().ifBlank { "manual" }
             val b = body.text.toString().trim()
             if (b.isEmpty()) {
-                Toast.makeText(this, "Nothing to analyze", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Nothing to analyze", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
