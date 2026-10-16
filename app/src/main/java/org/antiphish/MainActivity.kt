@@ -353,7 +353,7 @@ class MainActivity : AppCompatActivity() {
         layout.addView(Button(this).apply {
             text = "Clear history"
             setOnClickListener {
-                History.clear(this)
+                History.clear(this@MainActivity)
                 showHistoryScreen()
             }
         })
