@@ -1,8 +1,11 @@
 package org.antiphish
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -26,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         showLoginScreen()
     }
 
+    // ---------- Login ----------
     private fun showLoginScreen() {
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -44,9 +48,7 @@ class MainActivity : AppCompatActivity() {
             setTextColor(ContextCompat.getColor(this@MainActivity, R.color.muted))
         }
 
-        val username = EditText(this).apply {
-            hint = "Username"
-        }
+        val username = EditText(this).apply { hint = "Username" }
 
         val password = EditText(this).apply {
             hint = "Password"
@@ -54,9 +56,7 @@ class MainActivity : AppCompatActivity() {
                     android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
 
-        val button = Button(this).apply {
-            text = "Sign in"
-        }
+        val button = Button(this).apply { text = "Sign in" }
 
         button.setOnClickListener {
             val u = username.text.toString().trim()
@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(layout)
     }
 
+    // ---------- Android permissions ----------
     private fun requestPermissionsAndShowDashboard() {
         val missing = requiredPermissions.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
@@ -107,10 +108,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // ---------- Notification access helpers ----------
+    private fun isNotificationAccessEnabled(): Boolean {
+        val flat = Settings.Secure.getString(
+            contentResolver,
+            "enabled_notification_listeners"
+        ) ?: return false
+        return flat.contains(packageName)
+    }
+
+    private fun openNotificationAccessSettings() {
+        try {
+            startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+        } catch (e: Exception) {
+            Toast.makeText(
+                this,
+                "Open Settings: Apps -> Special access -> Notification access",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    // ---------- Dashboard ----------
     private fun showDashboard() {
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(40, 100, 40, 40)
+            setPadding(40, 80, 40, 40)
         }
 
         val welcome = TextView(this).apply {
@@ -125,28 +148,82 @@ class MainActivity : AppCompatActivity() {
             setTextColor(ContextCompat.getColor(this@MainActivity, R.color.muted))
         }
 
+        layout.addView(welcome)
+        layout.addView(plan)
+
+        // ---- Notification access card ----
+        val accessEnabled = isNotificationAccessEnabled()
+
+        val accessTitle = TextView(this).apply {
+            text = "Scan WhatsApp, Telegram, and Messenger"
+            textSize = 16f
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text))
+            setPadding(0, 40, 0, 8)
+        }
+
+        val accessDesc = TextView(this).apply {
+            text = if (accessEnabled) {
+                "✓ Notification access is enabled. Messaging apps are being scanned."
+            } else {
+                "AntiPhish needs notification access to read messages from " +
+                        "WhatsApp, Telegram, Messenger, Facebook, Instagram, and Signal. " +
+                        "Nothing leaves your phone."
+            }
+            textSize = 13f
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.muted))
+            setPadding(0, 0, 0, 12)
+        }
+
+        val accessButton = Button(this).apply {
+            text = if (accessEnabled) "Disable notification access" else "Enable notification access"
+        }
+
+        accessButton.setOnClickListener {
+            if (isNotificationAccessEnabled()) {
+                // To disable, we open the same settings — user toggles off manually
+                openNotificationAccessSettings()
+                Toast.makeText(
+                    this,
+                    "Toggle AntiPhish OFF in the list",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                openNotificationAccessSettings()
+            }
+        }
+
+        layout.addView(accessTitle)
+        layout.addView(accessDesc)
+        layout.addView(accessButton)
+
+        // ---- Status ----
         val status = TextView(this).apply {
-            text = "\nSMS, calls, and voice messages are being watched.\n\n" +
-                    "Signals will pop notifications on suspicious activity."
+            text = "\nSMS and calls are being watched.\n" +
+                    "Notifications are " +
+                    (if (accessEnabled) "being watched." else "not being watched yet.")
             textSize = 14f
             setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text))
+            setPadding(0, 30, 0, 0)
         }
+        layout.addView(status)
 
-        val logout = Button(this).apply {
-            text = "Logout"
-        }
-
+        val logout = Button(this).apply { text = "Logout" }
         logout.setOnClickListener {
             SessionManager.username = ""
             SessionManager.plan = ""
             showLoginScreen()
         }
 
-        layout.addView(welcome)
-        layout.addView(plan)
-        layout.addView(status)
         layout.addView(logout)
 
         setContentView(layout)
+    }
+
+    // Re-check notification access when returning from settings
+    override fun onResume() {
+        super.onResume()
+        if (SessionManager.username.isNotEmpty()) {
+            showDashboard()
+        }
     }
 }
