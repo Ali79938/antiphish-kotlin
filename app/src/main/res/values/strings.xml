@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AntiPhish</string>
+    <string name="login_title">AntiPhish</string>
+    <string name="login_subtitle">Real-time phishing detection</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="grant_permissions">Grant permissions</string>
+    <string name="skip">Skip</string>
+    <string name="tab_sms">SMS</string>
+    <string name="tab_calls">Calls</string>
+    <string name="tab_history">History</string>
+    <string name="logout">Logout</string>
+    <string name="analyze">Analyze</string>
+</resources>
