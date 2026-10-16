@@ -41,12 +41,12 @@ class MainActivity : AppCompatActivity() {
         val title = TextView(this).apply {
             text = "AntiPhish"
             textSize = 32f
-            setTextColor(ContextCompat.getColor(this, R.color.purple))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.purple))
         }
         val subtitle = TextView(this).apply {
             text = "Real-time phishing detection"
             textSize = 14f
-            setTextColor(ContextCompat.getColor(this, R.color.muted))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.muted))
         }
         val username = EditText(this).apply { hint = "Username" }
         val password = EditText(this).apply {
@@ -136,13 +136,13 @@ class MainActivity : AppCompatActivity() {
         layout.addView(TextView(this).apply {
             text = "Welcome, ${SessionManager.username}"
             textSize = 24f
-            setTextColor(ContextCompat.getColor(this, R.color.purple))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.purple))
         })
 
         layout.addView(TextView(this).apply {
             text = "Plan: ${SessionManager.plan}"
             textSize = 14f
-            setTextColor(ContextCompat.getColor(this, R.color.muted))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.muted))
             setPadding(0, 0, 0, 40)
         })
 
@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
         layout.addView(TextView(this).apply {
             text = "Scan WhatsApp, Telegram, and Messenger"
             textSize = 16f
-            setTextColor(ContextCompat.getColor(this, R.color.text))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text))
             setPadding(0, 0, 0, 8)
         })
 
@@ -164,7 +164,7 @@ class MainActivity : AppCompatActivity() {
                         "WhatsApp, Telegram, Messenger, Facebook, Instagram, and Signal."
             }
             textSize = 13f
-            setTextColor(ContextCompat.getColor(this, R.color.muted))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.muted))
             setPadding(0, 0, 0, 12)
         })
 
@@ -201,7 +201,7 @@ class MainActivity : AppCompatActivity() {
                     "Notifications are " +
                     (if (accessEnabled) "being watched." else "not being watched yet.")
             textSize = 14f
-            setTextColor(ContextCompat.getColor(this, R.color.text))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text))
             setPadding(0, 30, 0, 0)
         })
 
@@ -229,14 +229,14 @@ class MainActivity : AppCompatActivity() {
         layout.addView(TextView(this).apply {
             text = "Paste & Analyze"
             textSize = 22f
-            setTextColor(ContextCompat.getColor(this, R.color.purple))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.purple))
             setPadding(0, 0, 0, 8)
         })
 
         layout.addView(TextView(this).apply {
             text = "Paste any suspicious message from WhatsApp, Telegram, or any app."
             textSize = 13f
-            setTextColor(ContextCompat.getColor(this, R.color.muted))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.muted))
             setPadding(0, 0, 0, 16)
         })
 
@@ -252,7 +252,7 @@ class MainActivity : AppCompatActivity() {
 
         val resultView = TextView(this).apply {
             textSize = 14f
-            setTextColor(ContextCompat.getColor(this, R.color.text))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text))
             setPadding(0, 20, 0, 0)
         }
 
@@ -306,7 +306,7 @@ class MainActivity : AppCompatActivity() {
         layout.addView(TextView(this).apply {
             text = "Scan History"
             textSize = 22f
-            setTextColor(ContextCompat.getColor(this, R.color.purple))
+            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.purple))
             setPadding(0, 0, 0, 16)
         })
 
@@ -315,7 +315,7 @@ class MainActivity : AppCompatActivity() {
             layout.addView(TextView(this).apply {
                 text = "No scans yet."
                 textSize = 14f
-                setTextColor(ContextCompat.getColor(this, R.color.muted))
+                setTextColor(ContextCompat.getColor(this@MainActivity, R.color.muted))
             })
         } else {
             for (e in entries) {
