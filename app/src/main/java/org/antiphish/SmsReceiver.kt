@@ -13,8 +13,10 @@ class SmsReceiver : BroadcastReceiver() {
             val body = messages.joinToString(" ") { it.messageBody ?: "" }
 
             TrustManager.record(context, sender)
-
             val result = Analyzer.analyzeMessage(sender, body)
+
+            // Log every scan
+            History.add(context, "SMS", sender, body, result.verdict, result.score)
 
             if (!TrustManager.isTrusted(context, sender) &&
                 (result.verdict == "phishing" || result.verdict == "suspicious")) {
